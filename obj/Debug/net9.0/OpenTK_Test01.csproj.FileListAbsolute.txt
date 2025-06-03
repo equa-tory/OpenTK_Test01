@@ -29,3 +29,4 @@
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/OpenTK_Test01.genruntimeconfig.cache
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/ref/OpenTK_Test01.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/StbImageSharp.dll
+/Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/OpenTK_Test01.sourcelink.json
