@@ -12,7 +12,7 @@ class Program
         var nativeWindowSettings = new NativeWindowSettings()
         {
             ClientSize = new Vector2i(800, 600),
-            Title = "OpenTK Test",
+            Title = "Toryngine",
         };
 
         using var engine = new Engine(GameWindowSettings.Default, nativeWindowSettings);

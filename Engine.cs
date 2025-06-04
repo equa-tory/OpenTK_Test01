@@ -25,9 +25,9 @@ class Engine : GameWindow
 
         float[] vertices = {
             // positions    // tex coords
-             0.0f,  0.5f,   0.5f, 1.0f,
-            -0.5f, -0.5f,   0.0f, 0.0f,
-             0.5f, -0.5f,   1.0f, 0.0f
+             0.0f,  0.5f,   0.5f, 1.0f, // top
+            -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
+             0.5f, -0.5f,   1.0f, 0.0f, // bottom right
         };
 
         VBO = GL.GenBuffer();
@@ -37,9 +37,9 @@ class Engine : GameWindow
         VAO = GL.GenVertexArray();
         GL.BindVertexArray(VAO);
 
-        GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0);
+        GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0); // aPosition
         GL.EnableVertexAttribArray(0);
-        GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 2 * sizeof(float));
+        GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 2 * sizeof(float)); // aTexCoord
         GL.EnableVertexAttribArray(1);
 
         shader = new Shader("shader.vert", "shader.frag");
@@ -50,7 +50,7 @@ class Engine : GameWindow
         {
             var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
             texture = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, texture);
+            GL.BindTexture(TextureTarget.Texture2D, texture); // set texture to frag shader (uniform sampler2D uTexture)
 
             GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0,
                           PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
