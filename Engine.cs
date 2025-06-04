@@ -12,7 +12,7 @@ class Engine : GameWindow
     Vector2 triangleOffset = Vector2.Zero;
     Shader shader;
     int VAO, VBO;
-    int texture;
+    Texture texture;
 
     //--------------------------------------------------------------------------------------------
 
@@ -45,23 +45,7 @@ class Engine : GameWindow
         shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
-
-        using (var stream = File.OpenRead("texture.png"))
-        {
-            var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
-            texture = GL.GenTexture();
-            GL.BindTexture(TextureTarget.Texture2D, texture); // set texture to frag shader (uniform sampler2D uTexture)
-
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, image.Width, image.Height, 0,
-                          PixelFormat.Rgba, PixelType.UnsignedByte, image.Data);
-
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.Repeat);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-
-            GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
-        }
+        texture = new Texture("texture.png");
     }
 
     // Cleanup
@@ -84,7 +68,7 @@ class Engine : GameWindow
         GL.BindVertexArray(VAO);
         // GL.Uniform2(offsetLocation, triangleOffset);
         shader.Set("uOffset", triangleOffset);
-        GL.BindTexture(TextureTarget.Texture2D, texture);
+        texture.Bind();
         GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
 
         SwapBuffers();
