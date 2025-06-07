@@ -6,26 +6,29 @@ namespace Toryngine;
 
 public class GameObject
 {
+    private Dictionary<Type, Component> components;
+    public Transform transform;
+
     public Vector4 Color = Vector4.One;
-    public Vector2 Position = Vector2.Zero;
-    public Vector2 Size = Vector2.One;
     public Texture? Texture = null;
+    // public Shader? shader;
     private int VAO, VBO, EBO;
     private int indexCount;
-
-    public Vector2 Velocity = new Vector2(0, -.1f);
-    public Vector2 Acceleration = new Vector2(0, -9.8f);
 
     //--------------------------------------------------------------------------------------------
 
     // Start
-    public GameObject(float[] vertices, uint[] indices, Texture? texture = default, Color color = default, Vector2 position = default, Vector2 size = default)
+    public GameObject(float[] vertices, uint[] indices, Transform? transform = default, Color color = default, Texture? texture = null)
     {
-        Color = color == default ? Vector4.One : new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+        // shader = new Shader("Assets/Shaders/shader.vert", "Assets/Shaders/shader.frag");
+        // shader?.Use();
 
-        Texture = texture == default ? null : texture;
-        Position = position == default ? Vector2.Zero : position;
-        Size = size == default ? Vector2.One : size;
+        components = new Dictionary<Type, Component>();
+        this.transform = transform == default ? new Transform(Vector2.Zero, Vector2.One, 0) : transform;
+        AddComponent(this.transform);
+
+        Color = color == default ? Vector4.One : new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+        Texture = texture;
         indexCount = indices.Length;
 
         VAO = GL.GenVertexArray();
@@ -48,26 +51,44 @@ public class GameObject
     // Update
     public void Update()
     {
-        Velocity += Acceleration * 0.001f;
-        Position += Velocity * 0.001f;
+        foreach (var comp in components.Values)
+            comp.Update();
 
-        if (Position.X < -1f) Position.X = 1f;
-        if (Position.X > 1f) Position.X = -1f;
-        if (Position.Y < -1f) Position.Y = 1f;
-        if (Position.Y > 1f) Position.Y = -1f;
-        
-        if (Position.Y - Size.Y * 0.5f < -1f)
+        // TODO: Tmp screen border teleport
+        if (transform.Position.X < -1f) transform.Position.X = 1f;
+        if (transform.Position.X > 1f) transform.Position.X = -1f;
+        if (transform.Position.Y < -1f) transform.Position.Y = 1f;
+        if (transform.Position.Y > 1f) transform.Position.Y = -1f;
+
+        // TODO: Tmp screen border collision
+        Rigidbody rb = GetComponent<Rigidbody>();        
+        if (transform.Position.Y - transform.Scale.Y * 0.5f < -1f) // TODO: 0.5f wrong value
         {
-            Position.Y = -1f + Size.Y * 0.5f;
-            Velocity.Y = -Velocity.Y * 0.5f; // отскок с потерей скорости
+            transform.Position.Y = -1f + transform.Scale.Y * 0.5f;
+            rb.Velocity.Y = -rb.Velocity.Y * 0.5f; // отскок с потерей скорости
         }
+    }
+    //--------------------------------------------------------------------------------------------
+    public void AddComponent(Component comp)
+    {
+        comp.owner = this;
+        components[comp.GetType()] = comp;
+    }
+
+    public T GetComponent<T>() where T : Component
+    {
+        return components.TryGetValue(typeof(T), out var value) ? (T) value : null!;
+    }
+    public void RemoveComponent<T>() where T : Component
+    {
+        components.Remove(typeof(T));
     }
     //--------------------------------------------------------------------------------------------
 
     public void Draw(Shader shader)
     {
-        shader.Set("uOffset", Position);
-        shader.Set("uSize", Size);
+        shader.Set("uOffset", transform.Position);
+        shader.Set("uSize", transform.Scale);
         shader.Set("uColor", Color);
 
         if (Texture == null) Texture = new Texture("Assets/Textures/placeholder.png");
@@ -77,12 +98,4 @@ public class GameObject
         GL.DrawElements(PrimitiveType.Triangles, indexCount, DrawElementsType.UnsignedInt, 0);
     }
 
-    public Vector2 Min => Position - Size * 0.5f;
-    public Vector2 Max => Position + Size * 0.5f;
-
-    public bool IsColliding(GameObject other) {
-        return !(Max.X < other.Min.X || Min.X > other.Max.X ||
-                Max.Y < other.Min.Y || Min.Y > other.Max.Y);
-    }
-    
 }
