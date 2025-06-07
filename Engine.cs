@@ -53,12 +53,15 @@ public class Engine : GameWindow
         Texture texture = new Texture("texture.png");
         Texture texture1 = new Texture("1texture.png");
 
-        objects.Add(new GameObject(quadVertices, quadIndices,
-            position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));
+        // objects.Add(new GameObject(quadVertices, quadIndices,
+        //     position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));
 
         GenerateCircle(cirVertices, cirIndices, radius, segments);
         objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
             texture, position: new Vector2(-0.5f, .5f), size: new Vector2(1, 1)));
+
+        objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
+            texture, position: new Vector2(0.5f, 0f), size: new Vector2(1, 1)));
     }
 
     // Cleanup
@@ -95,6 +98,9 @@ public class Engine : GameWindow
 
         var mousePos = MousePosition;
         Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
+
+        foreach (var obj in objects)
+            obj.Update();
     }
 
     // Resize
