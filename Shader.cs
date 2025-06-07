@@ -49,10 +49,10 @@ public class Shader
         GL.Uniform2(location, value);
     }
     
-    public void Set(string name, System.Numerics.Vector4 value)
+    public void Set(string name, Vector4 value)
     {
         int location = GL.GetUniformLocation(Handle, name);
-        GL.Uniform4(location, new Vector4(value.X, value.Y, value.Z, value.W));
+        GL.Uniform4(location, value);
     }
     
     public void Set(string name, Matrix4 value)

@@ -33,11 +33,9 @@ public class Engine : GameWindow
     List<uint> cirIndices = new();
 
     Vector2 triangleOffset = Vector2.Zero;
-    Shader shader;
+    Shader shader = new Shader("shader.vert", "shader.frag");
     List<GameObject> objects = new();
     Matrix4 projection;
-
-    private ImGuiController imGuiController;
 
     //--------------------------------------------------------------------------------------------
 
@@ -48,11 +46,10 @@ public class Engine : GameWindow
     {
         base.OnLoad();
 
-        imGuiController = new ImGuiController(this);
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-        shader = new Shader("shader.vert", "shader.frag");
+        // shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
         Texture texture = new Texture("texture.png");
@@ -84,15 +81,11 @@ public class Engine : GameWindow
     {
         base.OnRenderFrame(args);
 
-        // imGuiController.Update(this, (float)args.Time);
-
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
         foreach (var obj in objects)
             obj.Draw(shader);
-
-        imGuiController.Render();
 
         SwapBuffers();
     }
@@ -102,34 +95,6 @@ public class Engine : GameWindow
     {
         base.OnUpdateFrame(args);
 
-        imGuiController.Update(this, (float)args.Time);
-
-        ImGui.Begin("Контроль объекта");
-
-        if (objects.Count > 0)
-        {
-            var obj = objects[0];
-
-            // System.Numerics.Vector2 size = obj.Size;
-            // System.Numerics.Vector2 pos = obj.Position;
-            System.Numerics.Vector4 color = obj.Color;
-
-            // if (ImGui.SliderFloat2("Size", ref size, 0.1f, 5.0f))
-            //     obj.Size = new Vector2(size.X, size.Y);
-
-            // if (ImGui.SliderFloat2("Position", ref pos, -2f, 2f))
-            //     obj.Position = new Vector2(pos.X, pos.Y);
-
-            // if (ImGui.ColorEdit4("Color", ref color))
-            //     obj.Color = new Vector4(color.X, color.Y, color.Z, color.W);
-
-            // ImGui.SliderFloat2("Size", ref objectSize, 0.1f, 5.0f);
-            ImGui.ColorEdit4("Color", ref color);
-
-        }
-
-        ImGui.End();
-
         if (IsKeyDown(Keys.Up)) triangleOffset.Y += 0.001f;
         if (IsKeyDown(Keys.Down)) triangleOffset.Y -= 0.001f;
         if (IsKeyDown(Keys.Left)) triangleOffset.X -= 0.001f;
@@ -138,7 +103,7 @@ public class Engine : GameWindow
         Title = $"OpenTK Test | FPS: {1f / args.Time:0}";
 
         var mousePos = MousePosition;
-        Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
+        // Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
 
         foreach (var obj in objects)
             obj.Update();
