@@ -13,6 +13,7 @@ public class Engine : GameWindow
     Shader shader;
     Texture texture;
     List<GameObject> objects = new();
+    Matrix4 projection;
 
     //--------------------------------------------------------------------------------------------
 
@@ -42,6 +43,9 @@ public class Engine : GameWindow
 
         shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
+
+        // Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, Size.X, Size.Y, 0, -1, 1);
+        // shader.Set("uProjection", projection);
 
         texture = new Texture("texture.png");
 
@@ -84,5 +88,21 @@ public class Engine : GameWindow
 
         var mousePos = MousePosition;
         Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
+    }
+
+    protected override void OnResize(ResizeEventArgs e)
+    {
+        base.OnResize(e);
+
+        float aspect = Size.X / (float)Size.Y;
+        if (aspect >= 1)
+            projection = Matrix4.CreateOrthographicOffCenter(-aspect, aspect, -1, 1, -1, 1);
+        else
+            projection = Matrix4.CreateOrthographicOffCenter(-1, 1, -1 / aspect, 1 / aspect, -1, 1);
+
+        GL.Viewport(0, 0, Size.X, Size.Y);
+
+        shader.Use();
+        shader.Set("uProjection", projection);
     }
 }
