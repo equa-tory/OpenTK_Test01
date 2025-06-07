@@ -53,7 +53,12 @@ public class Engine : GameWindow
         Texture texture = new Texture("texture.png");
         Texture texture1 = new Texture("1texture.png");
 
-        objects.Add(new GameObject(quadVertices, quadIndices, texture1, position: new Vector2(0.5f, 0.5f)));
+        objects.Add(new GameObject(quadVertices, quadIndices,
+            position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));
+
+        GenerateCircle(cirVertices, cirIndices, radius, segments);
+        objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
+            texture, position: new Vector2(-0.5f, .5f), size: new Vector2(1, 1)));
     }
 
     // Cleanup
@@ -97,13 +102,13 @@ public class Engine : GameWindow
     {
         base.OnResize(e);
 
-float fixedSize = 1.0f; // например, фиксируем высоту = 2 (от -1 до 1)
-float aspect = Size.X / (float)Size.Y;
+        float fixedSize = 1.0f; // например, фиксируем высоту = 2 (от -1 до 1)
+        float aspect = Size.X / (float)Size.Y;
 
-projection = Matrix4.CreateOrthographicOffCenter(
-    -fixedSize * aspect, fixedSize * aspect,
-    -fixedSize, fixedSize,
-    -1, 1);
+        projection = Matrix4.CreateOrthographicOffCenter(
+            -fixedSize * aspect, fixedSize * aspect,
+            -fixedSize, fixedSize,
+            -1, 1);
         GL.Viewport(0, 0, Size.X, Size.Y);
 
         shader.Use();

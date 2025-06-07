@@ -13,6 +13,8 @@ public class GameObject
     private int VAO, VBO, EBO;
     private int indexCount;
 
+    //--------------------------------------------------------------------------------------------
+
     public GameObject(float[] vertices, uint[] indices,
         Texture texture = default, Color color = default, Vector2 position = default, Vector2 size = default)
     {
@@ -43,6 +45,7 @@ public class GameObject
     public void Draw(Shader shader)
     {        
         shader.Set("uOffset", Position);
+        shader.Set("uSize", Size);
         shader.Set("uColor", Color);
         
         if (Texture == null) Texture = new Texture("placeholder.png");
