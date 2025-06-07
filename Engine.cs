@@ -3,6 +3,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
+using System.Drawing;
 
 namespace Toryngine;
 
@@ -20,19 +21,19 @@ public class Engine : GameWindow
         // positions   // tex coords
         -0.5f,  0.5f,   0.0f, 1.0f, // top left
         -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
-            0.5f, -0.5f,   1.0f, 0.0f, // bottom right
-            0.5f,  0.5f,   1.0f, 1.0f // top right
+        0.5f, -0.5f,   1.0f, 0.0f, // bottom right
+        0.5f,  0.5f,   1.0f, 1.0f // top right
     };
     uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
 
     // Cirlce
-    int segments = 32;
+    int segments = 16;
     float radius = 0.25f;
     List<float> cirVertices = new();
     List<uint> cirIndices = new();
 
     Vector2 triangleOffset = Vector2.Zero;
-    Shader shader;
+    Shader? shader;
     List<GameObject> objects = new();
     Matrix4 projection;
 
@@ -49,7 +50,7 @@ public class Engine : GameWindow
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
         shader = new Shader("shader.vert", "shader.frag");
-        shader.Use();
+        shader?.Use();
 
         Texture texture = new Texture("texture.png");
         Texture texture1 = new Texture("1texture.png");
@@ -59,12 +60,13 @@ public class Engine : GameWindow
         //     position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));
 
         objects.Add(new GameObject(quadVertices, quadIndices,
-            texture: tt));
+            color: Color.Pink, size: new Vector2(1, 1)));
 
         GenerateCircle(cirVertices, cirIndices, radius, segments);
         objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
-            texture, position: new Vector2(-0.5f, .5f), size: new Vector2(1, 1)));
+            texture, position: new Vector2(-0.5f, .5f), size: new Vector2(2,2)));
 
+        GenerateCircle(cirVertices, cirIndices, radius, segments);
         objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
             texture, position: new Vector2(0.5f, 0f), size: new Vector2(1, 1)));
     }
@@ -84,7 +86,7 @@ public class Engine : GameWindow
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
         foreach (var obj in objects)
-            obj.Draw(shader);
+            if(shader != null) obj.Draw(shader);
 
         SwapBuffers();
     }
@@ -122,8 +124,8 @@ public class Engine : GameWindow
             -1, 1);
         GL.Viewport(0, 0, Size.X, Size.Y);
 
-        shader.Use();
-        shader.Set("uProjection", projection);
+        shader?.Use();
+        shader?.Set("uProjection", projection);
     }
 
     //--------------------------------------------------------------------------------------------
