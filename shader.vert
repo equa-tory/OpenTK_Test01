@@ -1,8 +1,10 @@
 #version 330 core
 layout (location = 0) in vec2 aPosition;
 layout (location = 1) in vec2 aTexCoord;
+
 uniform vec2 uOffset;
 uniform mat4 uProjection;
+
 out vec2 texCoord;
 
 void main()

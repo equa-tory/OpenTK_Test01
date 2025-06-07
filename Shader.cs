@@ -31,16 +31,28 @@ public class Shader
 
     public void Use() => GL.UseProgram(Handle);
 
+    public void Set(string name, int value)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+        GL.Uniform1(location, value);
+    }
+
+    public void Set(string name, bool value)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+        GL.Uniform1(location, value ? 1 : 0);
+    }
+
     public void Set(string name, Vector2 value)
     {
         int location = GL.GetUniformLocation(Handle, name);
         GL.Uniform2(location, value);
     }
-
-    public void Set(string name, int value)
+    
+    public void Set(string name, Vector4 value)
     {
         int location = GL.GetUniformLocation(Handle, name);
-        GL.Uniform1(location, value);
+        GL.Uniform4(location, value);
     }
     
     public void Set(string name, Matrix4 value)

@@ -1,18 +1,27 @@
 using OpenTK.Mathematics;
 using OpenTK.Graphics.OpenGL4;
+using System.Drawing;
 
 namespace Toryngine;
 
 public class GameObject
 {
-    public Vector2 Position;
-    public Texture Texture;
+    public Vector4 Color = Vector4.One;
+    public Vector2 Position = Vector2.Zero;
+    public Vector2 Size = Vector2.One;
+    public Texture Texture = null;
     private int VAO, VBO, EBO;
+    private int indexCount;
 
-    public GameObject(Texture texture, Vector2 position, float[] vertices, uint[] indices)
+    public GameObject(float[] vertices, uint[] indices,
+        Texture texture = default, Color color = default, Vector2 position = default, Vector2 size = default)
     {
-        Texture = texture;
-        Position = position;
+        Color = color == default ? Vector4.One : new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+
+        Texture = texture == default ? null : texture;
+        Position = position == default ? Vector2.Zero : position;
+        Size = size == default ? Vector2.One : size;
+        indexCount = indices.Length;
 
         VAO = GL.GenVertexArray();
         VBO = GL.GenBuffer();
@@ -34,9 +43,13 @@ public class GameObject
     public void Draw(Shader shader)
     {        
         shader.Set("uOffset", Position);
+        shader.Set("uColor", Color);
+        
+        if (Texture == null) Texture = new Texture("placeholder.png");
         Texture.Bind();
+
         GL.BindVertexArray(VAO);
-        // GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
-        GL.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, 0);
+        GL.DrawElements(PrimitiveType.Triangles, indexCount, DrawElementsType.UnsignedInt, 0);
     }
+    
 }

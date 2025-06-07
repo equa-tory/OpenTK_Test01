@@ -4,14 +4,37 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
+using System.Drawing;
 
 namespace Toryngine;
 
 public class Engine : GameWindow
 {
+    float[] triVertices = {
+        // positions    // tex coords
+            0.0f,  0.5f,   0.5f, 1.0f, // top
+        -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
+            0.5f, -0.5f,   1.0f, 0.0f, // bottom right
+    };
+    uint[] triIndices = { 0, 1, 2 };
+
+    float[] quadVertices = {
+        // positions   // tex coords
+        -0.5f,  0.5f,   0.0f, 1.0f, // top left
+        -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
+            0.5f, -0.5f,   1.0f, 0.0f, // bottom right
+            0.5f,  0.5f,   1.0f, 1.0f // top right
+    };
+    uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
+
+    // Cirlce
+    int segments = 32;
+    float radius = 0.25f;
+    List<float> cirVertices = new();
+    List<uint> cirIndices = new();
+
     Vector2 triangleOffset = Vector2.Zero;
     Shader shader;
-    Texture texture;
     List<GameObject> objects = new();
     Matrix4 projection;
 
@@ -24,34 +47,18 @@ public class Engine : GameWindow
     {
         base.OnLoad();
 
-        float[] triVertices = {
-            // positions    // tex coords
-             0.0f,  0.5f,   0.5f, 1.0f, // top
-            -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
-             0.5f, -0.5f,   1.0f, 0.0f, // bottom right
-        };
-        uint[] triIndices = { 0, 1, 2 };
-
-        float[] quadVertices = {
-            // positions   // tex coords
-            -0.5f,  0.5f,   0.0f, 1.0f, // top left
-            -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
-             0.5f, -0.5f,   1.0f, 0.0f, // bottom right
-             0.5f,  0.5f,   1.0f, 1.0f // top right
-        };
-        uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
-
         shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
-        // Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, Size.X, Size.Y, 0, -1, 1);
-        // shader.Set("uProjection", projection);
+        Texture texture = new Texture("texture.png");
+        Texture texture1 = new Texture("1texture.png");
 
-        texture = new Texture("texture.png");
+        objects.Add(new GameObject(quadVertices, quadIndices, texture1, position: new Vector2(0.5f, 0.5f)));
+        objects.Add(new GameObject(triVertices, triIndices, texture, position: new Vector2(-.5f, -.5f)));
 
-        // objects.Add(new GameObject(texture, new Vector2(0.0f, 0.0f), triVertices, triIndices));
-        objects.Add(new GameObject(texture, new Vector2(1.0f, 1.0f), triVertices, triIndices));
-        objects.Add(new GameObject(texture, new Vector2(0.0f, 0.0f), quadVertices, quadIndices));
+        GenerateCircle(cirVertices, cirIndices, radius, segments);
+        objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
+            color: Color.Red, position: new Vector2(2f, .5f)));
     }
 
     // Cleanup
@@ -90,19 +97,47 @@ public class Engine : GameWindow
         Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
     }
 
+    // Resize
     protected override void OnResize(ResizeEventArgs e)
     {
         base.OnResize(e);
 
         float aspect = Size.X / (float)Size.Y;
-        if (aspect >= 1)
-            projection = Matrix4.CreateOrthographicOffCenter(-aspect, aspect, -1, 1, -1, 1);
-        else
-            projection = Matrix4.CreateOrthographicOffCenter(-1, 1, -1 / aspect, 1 / aspect, -1, 1);
+        if (aspect >= 1) projection = Matrix4.CreateOrthographicOffCenter(-aspect, aspect, -1, 1, -1, 1);
+        else projection = Matrix4.CreateOrthographicOffCenter(-1, 1, -1 / aspect, 1 / aspect, -1, 1);
 
         GL.Viewport(0, 0, Size.X, Size.Y);
 
         shader.Use();
         shader.Set("uProjection", projection);
     }
+
+    //--------------------------------------------------------------------------------------------
+
+    private void GenerateCircle(List<float> cirVertices, List<uint> cirIndices, float radius = 0.25f, int segments = 32)
+    {
+        // Circle draw
+        // center
+        cirVertices.Add(0); cirVertices.Add(0); // xy
+        cirVertices.Add(0.5f); cirVertices.Add(0.5f); // uv
+
+        for (int i = 0; i <= segments; i++)
+        {
+            float angle = i / (float)segments * MathF.PI * 2;
+            float x = MathF.Cos(angle) * radius;
+            float y = MathF.Sin(angle) * radius;
+
+            cirVertices.Add(x); cirVertices.Add(y);
+            cirVertices.Add((x + 1) / 2); // uv x
+            cirVertices.Add((y + 1) / 2); // uv y
+
+            if (i > 0)
+            {
+                cirIndices.Add(0);
+                cirIndices.Add((uint)i);
+                cirIndices.Add((uint)(i + 1));
+            }
+        }
+    }
+
 }
