@@ -3,7 +3,6 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
-using ImGuiNET;
 
 namespace Toryngine;
 
@@ -33,7 +32,7 @@ public class Engine : GameWindow
     List<uint> cirIndices = new();
 
     Vector2 triangleOffset = Vector2.Zero;
-    Shader shader = new Shader("shader.vert", "shader.frag");
+    Shader shader;
     List<GameObject> objects = new();
     Matrix4 projection;
 
@@ -49,7 +48,7 @@ public class Engine : GameWindow
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-        // shader = new Shader("shader.vert", "shader.frag");
+        shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
         Texture texture = new Texture("texture.png");
