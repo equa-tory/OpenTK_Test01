@@ -6,7 +6,7 @@ namespace Toryngine;
 
 public class GameObject
 {
-    public Vector4 Color = Vector4.One;
+    public System.Numerics.Vector4 Color = System.Numerics.Vector4.One;
     public Vector2 Position = Vector2.Zero;
     public Vector2 Size = Vector2.One;
     public Texture Texture = null;
@@ -21,7 +21,7 @@ public class GameObject
     // Start
     public GameObject(float[] vertices, uint[] indices, Texture texture = default, Color color = default, Vector2 position = default, Vector2 size = default)
     {
-        Color = color == default ? Vector4.One : new Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+        Color = color == default ? System.Numerics.Vector4.One : new System.Numerics.Vector4(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
 
         Texture = texture == default ? null : texture;
         Position = position == default ? Vector2.Zero : position;

@@ -1,10 +1,9 @@
-using StbImageSharp;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
-using System.Drawing;
+using ImGuiNET;
 
 namespace Toryngine;
 
@@ -38,6 +37,8 @@ public class Engine : GameWindow
     List<GameObject> objects = new();
     Matrix4 projection;
 
+    private ImGuiController imGuiController;
+
     //--------------------------------------------------------------------------------------------
 
     public Engine(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings) { }
@@ -47,14 +48,22 @@ public class Engine : GameWindow
     {
         base.OnLoad();
 
+        imGuiController = new ImGuiController(this);
+        GL.Enable(EnableCap.Blend);
+        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
         shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
         Texture texture = new Texture("texture.png");
         Texture texture1 = new Texture("1texture.png");
+        Texture tt = new Texture("logo-dark-round.png");
 
         // objects.Add(new GameObject(quadVertices, quadIndices,
         //     position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));
+
+        objects.Add(new GameObject(quadVertices, quadIndices,
+            texture: tt));
 
         GenerateCircle(cirVertices, cirIndices, radius, segments);
         objects.Add(new GameObject(cirVertices.ToArray(), cirIndices.ToArray(),
@@ -75,11 +84,15 @@ public class Engine : GameWindow
     {
         base.OnRenderFrame(args);
 
+        // imGuiController.Update(this, (float)args.Time);
+
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
         foreach (var obj in objects)
             obj.Draw(shader);
+
+        imGuiController.Render();
 
         SwapBuffers();
     }
@@ -88,6 +101,34 @@ public class Engine : GameWindow
     protected override void OnUpdateFrame(FrameEventArgs args)
     {
         base.OnUpdateFrame(args);
+
+        imGuiController.Update(this, (float)args.Time);
+
+        ImGui.Begin("Контроль объекта");
+
+        if (objects.Count > 0)
+        {
+            var obj = objects[0];
+
+            // System.Numerics.Vector2 size = obj.Size;
+            // System.Numerics.Vector2 pos = obj.Position;
+            System.Numerics.Vector4 color = obj.Color;
+
+            // if (ImGui.SliderFloat2("Size", ref size, 0.1f, 5.0f))
+            //     obj.Size = new Vector2(size.X, size.Y);
+
+            // if (ImGui.SliderFloat2("Position", ref pos, -2f, 2f))
+            //     obj.Position = new Vector2(pos.X, pos.Y);
+
+            // if (ImGui.ColorEdit4("Color", ref color))
+            //     obj.Color = new Vector4(color.X, color.Y, color.Z, color.W);
+
+            // ImGui.SliderFloat2("Size", ref objectSize, 0.1f, 5.0f);
+            ImGui.ColorEdit4("Color", ref color);
+
+        }
+
+        ImGui.End();
 
         if (IsKeyDown(Keys.Up)) triangleOffset.Y += 0.001f;
         if (IsKeyDown(Keys.Down)) triangleOffset.Y -= 0.001f;

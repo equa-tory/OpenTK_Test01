@@ -30,3 +30,9 @@
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/ref/OpenTK_Test01.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/StbImageSharp.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/OpenTK_Test01.sourcelink.json
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/ImGui.NET.dll
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/linux-x64/native/libcimgui.so
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/osx/native/libcimgui.dylib
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-arm64/native/cimgui.dll
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-x64/native/cimgui.dll
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-x86/native/cimgui.dll
