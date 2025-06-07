@@ -5,11 +5,18 @@
     <TargetFramework>net9.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableDefaultCompileItems>true</EnableDefaultCompileItems>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="OpenTK" Version="4.9.4" />
     <PackageReference Include="StbImageSharp" Version="2.30.15" />
+  </ItemGroup>
+
+  <ItemGroup>
+  <Content Include="Assets\**\*.*">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
   </ItemGroup>
 
 </Project>

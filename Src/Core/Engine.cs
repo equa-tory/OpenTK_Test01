@@ -27,7 +27,7 @@ public class Engine : GameWindow
     uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
 
     // Cirlce
-    int segments = 16;
+    int segments = 32;
     float radius = 0.25f;
     List<float> cirVertices = new();
     List<uint> cirIndices = new();
@@ -39,7 +39,8 @@ public class Engine : GameWindow
 
     //--------------------------------------------------------------------------------------------
 
-    public Engine(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) : base(gameWindowSettings, nativeWindowSettings) { }
+    public Engine(GameWindowSettings gameWindowSettings, NativeWindowSettings nativeWindowSettings) 
+        : base(gameWindowSettings, nativeWindowSettings) { }
 
     // Start
     protected override void OnLoad()
@@ -49,12 +50,12 @@ public class Engine : GameWindow
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-        shader = new Shader("shader.vert", "shader.frag");
+        shader = new Shader("Assets/Shaders/shader.vert", "Assets/Shaders/shader.frag");
         shader?.Use();
 
-        Texture texture = new Texture("texture.png");
-        Texture texture1 = new Texture("1texture.png");
-        Texture tt = new Texture("logo-dark-round.png");
+        Texture texture = new Texture("Assets/Textures/texture.png");
+        Texture texture1 = new Texture("Assets/Textures/1texture.png");
+        Texture tt = new Texture("Assets/Textures/logo-dark-round.png");
 
         // objects.Add(new GameObject(quadVertices, quadIndices,
         //     position: new Vector2(0f, -1f), color:Color.Green, size: new Vector2(5, 1)));

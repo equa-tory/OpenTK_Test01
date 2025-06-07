@@ -30,3 +30,10 @@
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/ref/OpenTK_Test01.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/StbImageSharp.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/obj/Debug/net9.0/OpenTK_Test01.sourcelink.json
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/.DS_Store
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Shaders/shader.frag
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Shaders/shader.vert
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Textures/1texture.png
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Textures/logo-dark-round.png
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Textures/placeholder.png
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Textures/texture.png

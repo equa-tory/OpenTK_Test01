@@ -70,7 +70,7 @@ public class GameObject
         shader.Set("uSize", Size);
         shader.Set("uColor", Color);
 
-        if (Texture == null) Texture = new Texture("placeholder.png");
+        if (Texture == null) Texture = new Texture("Assets/Textures/placeholder.png");
         Texture.Bind();
 
         GL.BindVertexArray(VAO);
