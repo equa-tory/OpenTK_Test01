@@ -16,6 +16,8 @@ public class Texture
         Handle = GL.GenTexture();
         GL.BindTexture(TextureTarget.Texture2D, Handle); // set texture to frag shader (uniform sampler2D uTexture)
 
+        StbImage.stbi_set_flip_vertically_on_load(1);
+
         using var stream = File.OpenRead(path);
         var image = ImageResult.FromStream(stream, ColorComponents.RedGreenBlueAlpha);
 

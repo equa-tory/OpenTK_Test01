@@ -7,12 +7,12 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace Toryngine;
 
-class Engine : GameWindow
+public class Engine : GameWindow
 {
     Vector2 triangleOffset = Vector2.Zero;
     Shader shader;
-    int VAO, VBO;
     Texture texture;
+    List<GameObject> objects = new();
 
     //--------------------------------------------------------------------------------------------
 
@@ -23,29 +23,31 @@ class Engine : GameWindow
     {
         base.OnLoad();
 
-        float[] vertices = {
+        float[] triVertices = {
             // positions    // tex coords
              0.0f,  0.5f,   0.5f, 1.0f, // top
             -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
              0.5f, -0.5f,   1.0f, 0.0f, // bottom right
         };
+        uint[] triIndices = { 0, 1, 2 };
 
-        VBO = GL.GenBuffer();
-        GL.BindBuffer(BufferTarget.ArrayBuffer, VBO);
-        GL.BufferData(BufferTarget.ArrayBuffer, vertices.Length * sizeof(float), vertices, BufferUsageHint.StaticDraw);
-
-        VAO = GL.GenVertexArray();
-        GL.BindVertexArray(VAO);
-
-        GL.VertexAttribPointer(0, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 0); // aPosition
-        GL.EnableVertexAttribArray(0);
-        GL.VertexAttribPointer(1, 2, VertexAttribPointerType.Float, false, 4 * sizeof(float), 2 * sizeof(float)); // aTexCoord
-        GL.EnableVertexAttribArray(1);
+        float[] quadVertices = {
+            // positions   // tex coords
+            -0.5f,  0.5f,   0.0f, 1.0f, // top left
+            -0.5f, -0.5f,   0.0f, 0.0f, // bottom left
+             0.5f, -0.5f,   1.0f, 0.0f, // bottom right
+             0.5f,  0.5f,   1.0f, 1.0f // top right
+        };
+        uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
 
         shader = new Shader("shader.vert", "shader.frag");
         shader.Use();
 
         texture = new Texture("texture.png");
+
+        // objects.Add(new GameObject(texture, new Vector2(0.0f, 0.0f), triVertices, triIndices));
+        objects.Add(new GameObject(texture, new Vector2(1.0f, 1.0f), triVertices, triIndices));
+        objects.Add(new GameObject(texture, new Vector2(0.0f, 0.0f), quadVertices, quadIndices));
     }
 
     // Cleanup
@@ -61,15 +63,9 @@ class Engine : GameWindow
 
         GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
         GL.Clear(ClearBufferMask.ColorBufferBit);
-        // window.SwapBuffers();
-        GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        GL.UseProgram(shader.Handle);
-        GL.BindVertexArray(VAO);
-        // GL.Uniform2(offsetLocation, triangleOffset);
-        shader.Set("uOffset", triangleOffset);
-        texture.Bind();
-        GL.DrawArrays(PrimitiveType.Triangles, 0, 3);
+        foreach (var obj in objects)
+            obj.Draw(shader);
 
         SwapBuffers();
     }

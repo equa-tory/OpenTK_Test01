@@ -6,7 +6,7 @@ namespace Toryngine;
 public class Shader
 {
     public int Handle { get; private set; }
-    
+
     public Shader(string vertexPath, string fragmentPath)
     {
         string vertexSource = File.ReadAllText(vertexPath);
@@ -41,5 +41,11 @@ public class Shader
     {
         int location = GL.GetUniformLocation(Handle, name);
         GL.Uniform1(location, value);
+    }
+    
+    public void Set(string name, Matrix4 value)
+    {
+        int location = GL.GetUniformLocation(Handle, name);
+        GL.UniformMatrix4(location, false, ref value);
     }
 }
