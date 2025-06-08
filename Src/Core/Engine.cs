@@ -9,7 +9,6 @@ namespace Toryngine;
 public class Engine : GameWindow
 {
     Scene? scene;
-    Vector2 triangleOffset = Vector2.Zero;
     public Matrix4 projection;
     Shader? shader;
 
@@ -56,13 +55,9 @@ public class Engine : GameWindow
     protected override void OnUpdateFrame(FrameEventArgs args)
     {
         base.OnUpdateFrame(args);
+        Input.Update(KeyboardState, MouseState);
 
-        // TODO: Input class
-        if (IsKeyDown(Keys.Up)) triangleOffset.Y += 0.001f;
-        if (IsKeyDown(Keys.Down)) triangleOffset.Y -= 0.001f;
-        if (IsKeyDown(Keys.Left)) triangleOffset.X -= 0.001f;
-        if (IsKeyDown(Keys.Right)) triangleOffset.X += 0.001f;
-        if (IsKeyPressed(Keys.W)) scene!.objects[0].GetComponent<Rigidbody>().ApplyForce(new Vector2(0, 5f));
+        // if (IsKeyPressed(Keys.W)) scene!.objects[0].GetComponent<Rigidbody>().ApplyForce(new Vector2(0, 5f));
         
         Title = $"OpenTK Test | FPS: {1f / args.Time:0}";
 

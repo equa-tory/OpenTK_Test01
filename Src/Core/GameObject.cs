@@ -53,20 +53,6 @@ public class GameObject
     {
         foreach (var comp in components.Values)
             comp.Update();
-
-        // TODO: Tmp screen border teleport
-        if (transform.Position.X < -1f) transform.Position.X = 1f;
-        if (transform.Position.X > 1f) transform.Position.X = -1f;
-        if (transform.Position.Y < -1f) transform.Position.Y = 1f;
-        if (transform.Position.Y > 1f) transform.Position.Y = -1f;
-
-        // TODO: Tmp screen border collision
-        Rigidbody rb = GetComponent<Rigidbody>();        
-        if (transform.Position.Y - transform.Scale.Y * 0.5f < -1f) // TODO: 0.5f wrong value
-        {
-            transform.Position.Y = -1f + transform.Scale.Y * 0.5f;
-            rb.Velocity.Y = -rb.Velocity.Y * 0.5f; // отскок с потерей скорости
-        }
     }
     //--------------------------------------------------------------------------------------------
     public void AddComponent(Component comp)
