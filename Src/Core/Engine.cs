@@ -3,6 +3,7 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using OpenTK.Graphics.OpenGL4;
+using ImGuiNET;
 
 namespace Toryngine;
 
@@ -11,6 +12,7 @@ public class Engine : GameWindow
     Scene? scene;
     public Matrix4 projection;
     Shader? shader;
+    private ImGuiController? imGuiController;
 
     //--------------------------------------------------------------------------------------------
 
@@ -29,6 +31,8 @@ public class Engine : GameWindow
 
         shader = new Shader("Assets/Shaders/shader.vert", "Assets/Shaders/shader.frag");
         shader?.Use();
+
+        imGuiController = new ImGuiController(Size.X, Size.Y);
     }
 
     // Cleanup
@@ -48,6 +52,8 @@ public class Engine : GameWindow
         foreach (var obj in scene!.objects)
             obj.Draw(shader!);
 
+        imGuiController?.Render();
+
         SwapBuffers();
     }
 
@@ -56,10 +62,14 @@ public class Engine : GameWindow
     {
         base.OnUpdateFrame(args);
         Input.Update(KeyboardState, MouseState);
-
-        // if (IsKeyPressed(Keys.W)) scene!.objects[0].GetComponent<Rigidbody>().ApplyForce(new Vector2(0, 5f));
         
-        Title = $"OpenTK Test | FPS: {1f / args.Time:0}";
+        imGuiController?.Update(this, (float)args.Time);
+
+        ImGui.Begin("Debug");
+        ImGui.Text($"FPS: {1f / args.Time:0}");
+        ImGui.End();
+
+        // Title = $"OpenTK Test | FPS: {1f / args.Time:0}";
 
         var mousePos = MousePosition;
         // Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
