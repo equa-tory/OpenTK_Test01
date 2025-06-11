@@ -43,3 +43,5 @@
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-arm64/native/cimgui.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-x64/native/cimgui.dll
 /Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/runtimes/win-x86/native/cimgui.dll
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/Textures/maxwell.png
+/Users/equa/Developer/Cs/OpenTK_Test01/bin/Debug/net9.0/Assets/GameManager.cs

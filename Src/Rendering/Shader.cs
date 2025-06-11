@@ -31,7 +31,7 @@ public class Shader
 
     public void Use() => GL.UseProgram(Handle);
 
-    public void Set(string name, int value)
+    public void Set(string name, float value)
     {
         int location = GL.GetUniformLocation(Handle, name);
         GL.Uniform1(location, value);

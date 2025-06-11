@@ -6,12 +6,13 @@ namespace Toryngine;
 
 public class Scene
 {
-    public List<GameObject> objects = new List<GameObject>();
+    public List<GameObject> objects = new ();
 
 
     Texture texture = new Texture("Assets/Textures/texture.png");
     Texture texture1 = new Texture("Assets/Textures/1texture.png");
     Texture tt = new Texture("Assets/Textures/logo-dark-round.png");
+    Texture maxwell = new Texture("Assets/Textures/maxwell.png");
 
     #region Shapes
     float[] triVertices = {
@@ -42,28 +43,35 @@ public class Scene
 
     public Scene()
     {
-        GameObject quad = DrawQuad(texture: tt);
-        quad.AddComponent(new Rigidbody());
+        GameObject gm = new GameObject(null, null, "GameManager");
+        gm.AddComponent(new GameManager());
+        objects.Add(gm);
 
-        GameObject circle = DrawCircle(transform: new Transform(position: new Vector2(1f, 0.5f)));
+        DrawQuad("Wall", transform: new Transform(scale: new Vector2(0.2f, 0.5f)), color: Color.DarkBlue, texture: texture);
+
+        GameObject quad = DrawQuad("Maxwell", texture: maxwell);
+        quad.AddComponent(new Rigidbody());
+        quad.AddComponent(new Rotator());
+
+        GameObject circle = DrawCircle("ball", transform: new Transform(position: new Vector2(1f, 0.5f)));
         circle.AddComponent(new Rigidbody());
     }
 
     //--------------------------------------------------------------------------------------------
 
-    public GameObject DrawQuad(Transform? transform = null, Color color = default, Texture? texture = null)
+    public GameObject DrawQuad(string? name = default, Transform? transform = null, Color color = default, Texture? texture = null)
     {
-        GameObject go = new GameObject(quadVertices, quadIndices, transform, color, texture);
+        GameObject go = new GameObject(quadVertices, quadIndices, name, transform, color, texture);
         objects.Add(go);
         return go;
     }
-    public GameObject DrawTriangle(Transform? transform = null, Color color = default, Texture? texture = null)
+    public GameObject DrawTriangle(string? name = default, Transform? transform = null, Color color = default, Texture? texture = null)
     {
-        GameObject go = new GameObject(triVertices, triIndices, transform, color, texture);
+        GameObject go = new GameObject(triVertices, triIndices, name, transform, color, texture);
         objects.Add(go);
         return go;
     }
-    public GameObject DrawCircle(Transform? transform = null, Color color = default, Texture? texture = null)
+    public GameObject DrawCircle(string? name = default, Transform? transform = null, Color color = default, Texture? texture = null)
     {
         // Circle draw
         // center
@@ -89,8 +97,8 @@ public class Scene
         }
 
         // Draw
-        GameObject go = new GameObject(cirVertices.ToArray(), cirIndices.ToArray(), transform, color, texture);
+        GameObject go = new GameObject(cirVertices.ToArray(), cirIndices.ToArray(), name, transform, color, texture);
         objects.Add(go);
         return go;
-    }
 }
+    }

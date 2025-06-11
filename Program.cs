@@ -9,7 +9,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        var windowSize = new Vector2i(800, 600);
+        var windowSize = new Vector2i(800, 800);
 
         var nativeWindowSettings = new NativeWindowSettings()
         {

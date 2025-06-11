@@ -74,6 +74,46 @@ public class Engine : GameWindow
         var mousePos = MousePosition;
         // Console.WriteLine($"Mouse Position: X={mousePos.X:0.00}, Y={mousePos.Y:0.00}");
 
+        int index = 1;
+        foreach (var obj in scene!.objects)
+        {
+            ImGui.PushID(index);
+            if (ImGui.TreeNode($"{obj.name}##{index}"))
+            {
+                if (obj.GetComponent<Rigidbody>() != null) {
+                    var rb = obj.GetComponent<Rigidbody>();
+                    if (ImGui.Button("Throw"))
+                        rb.ApplyForce(new Vector2(1f, 1f));
+                    ImGui.Text($"Velocity: {rb.Velocity.X:0.00}, {rb.Velocity.Y:0.00}");
+                }
+                if (obj.GetComponent<Rotator>() != null) {
+                    var rotr = obj.GetComponent<Rotator>();
+                    var speed = rotr.speed;
+                    if (ImGui.SliderFloat("Speed", ref speed, 0f, .05f))
+                        rotr.speed = speed;
+                }
+
+                var transform = obj.GetComponent<Transform>();
+                var pos = new System.Numerics.Vector2(transform.Position.X, transform.Position.Y);
+                if (ImGui.SliderFloat2("Position", ref pos, -1f, 1f))
+                    transform.Position = new OpenTK.Mathematics.Vector2(pos.X, pos.Y);
+                var scale = new System.Numerics.Vector2(transform.Scale.X, transform.Scale.Y);
+                if (ImGui.SliderFloat2("Scale", ref scale, -1f, 1f))
+                    transform.Scale = new OpenTK.Mathematics.Vector2(scale.X, scale.Y);
+                var rot = transform.Rotation;
+                if (ImGui.SliderFloat("Rotation", ref rot, 0f, MathF.PI * 2f))
+                    transform.Rotation = rot;
+
+                var color = new System.Numerics.Vector4(obj.Color.X, obj.Color.Y, obj.Color.Z, obj.Color.W);
+                if (ImGui.ColorEdit4("Color", ref color))
+                    obj.Color = new OpenTK.Mathematics.Vector4(color.X, color.Y, color.Z, color.W);
+
+                ImGui.TreePop();
+            }
+            ImGui.PopID();
+            index++;
+        }
+
         foreach (var obj in scene!.objects)
             obj.Update();
     }
@@ -94,6 +134,8 @@ public class Engine : GameWindow
 
         shader?.Use();
         shader?.Set("uProjection", projection);
+
+        imGuiController?.WindowResized(Size.X, Size.Y);
     }
 
 }

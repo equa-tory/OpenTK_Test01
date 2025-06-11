@@ -1,0 +1,25 @@
+{
+    "favorites.resources": [
+        {
+            "filePath": "Assets",
+            "group": "Default"
+        },
+        {
+            "filePath": "bin/Debug/net9.0",
+            "group": "Default"
+        },
+        {
+            "filePath": "Src",
+            "group": "Default"
+        },
+        {
+            "filePath": "OpenTK_Test01.csproj",
+            "group": "Default"
+        },
+        {
+            "filePath": "Program.cs",
+            "group": "Default"
+        }
+    ],
+    "favorites.sortOrder": "ASC"
+}

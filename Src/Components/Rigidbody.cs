@@ -5,7 +5,7 @@ namespace Toryngine;
 
 public class Rigidbody : Component
 {
-    private Vector2 Velocity = Vector2.Zero;
+    public Vector2 Velocity = Vector2.Zero;
     private static Vector2 Acceleration = new Vector2(0, -9.8f);
 
     //--------------------------------------------------------------------------------------------
