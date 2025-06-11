@@ -43,18 +43,30 @@ public class Scene
 
     public Scene()
     {
+        Init();
+    }
+
+    public void Init()
+    {
         GameObject gm = new GameObject(null, null, "GameManager");
         gm.AddComponent(new GameManager());
         objects.Add(gm);
 
-        DrawQuad("Wall", transform: new Transform(scale: new Vector2(0.2f, 0.5f)), color: Color.DarkBlue, texture: texture);
+        GameObject wall = DrawQuad("Wall", transform: new Transform(new Vector2(0, -0.75f), new Vector2(0.2f, 0.75f)), texture: texture);
+        wall.AddComponent(new Collider());
 
-        GameObject quad = DrawQuad("Maxwell", texture: maxwell);
-        quad.AddComponent(new Rigidbody());
-        quad.AddComponent(new Rotator());
+        float randXPos = (float)Random.Shared.NextDouble() * 1.85f - .85f;
+        Transform ballTransform = new Transform(new Vector2(randXPos, .5f), new Vector2(.5f, .5f));
+        GameObject ball = DrawCircle("Ball", ballTransform, Color.Pink, texture1);
+        ball.AddComponent(new Rigidbody());
 
-        GameObject circle = DrawCircle("ball", transform: new Transform(position: new Vector2(1f, 0.5f)));
-        circle.AddComponent(new Rigidbody());
+        GameObject player1 = DrawQuad("Player1", new Transform(new Vector2(-0.5f, -0.5f), new Vector2(0.5f, 0.1f), -.5f), color: Color.Blue);
+        GameObject player2 = DrawQuad("Player2", new Transform(new Vector2(0.5f, -0.5f), new Vector2(0.5f, 0.1f), .5f), color: Color.Orange);
+        player1.AddComponent(new Collider());
+        player2.AddComponent(new Collider());
+
+        gm.GetComponent<GameManager>().player1Transform = player1.GetComponent<Transform>();
+        gm.GetComponent<GameManager>().player2Transform = player2.GetComponent<Transform>();
     }
 
     //--------------------------------------------------------------------------------------------

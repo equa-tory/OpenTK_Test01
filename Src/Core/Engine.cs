@@ -62,7 +62,7 @@ public class Engine : GameWindow
     {
         base.OnUpdateFrame(args);
         Input.Update(KeyboardState, MouseState);
-        
+
         imGuiController?.Update(this, (float)args.Time);
 
         ImGui.Begin("Debug");
@@ -80,13 +80,15 @@ public class Engine : GameWindow
             ImGui.PushID(index);
             if (ImGui.TreeNode($"{obj.name}##{index}"))
             {
-                if (obj.GetComponent<Rigidbody>() != null) {
+                if (obj.GetComponent<Rigidbody>() != null)
+                {
                     var rb = obj.GetComponent<Rigidbody>();
                     if (ImGui.Button("Throw"))
                         rb.ApplyForce(new Vector2(1f, 1f));
                     ImGui.Text($"Velocity: {rb.Velocity.X:0.00}, {rb.Velocity.Y:0.00}");
                 }
-                if (obj.GetComponent<Rotator>() != null) {
+                if (obj.GetComponent<Rotator>() != null)
+                {
                     var rotr = obj.GetComponent<Rotator>();
                     var speed = rotr.speed;
                     if (ImGui.SliderFloat("Speed", ref speed, 0f, .05f))
@@ -116,6 +118,15 @@ public class Engine : GameWindow
 
         foreach (var obj in scene!.objects)
             obj.Update();
+
+
+
+        // Restart game
+        if (Input.IsKeyDown(Keys.R))
+        {
+            scene.objects.Clear();
+            scene.Init();
+        }
     }
 
     // Resize
