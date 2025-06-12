@@ -4,10 +4,9 @@ namespace Toryngine;
 
 public class GameManager : Component
 {
-    public float player1Pos = 0f;
-    public Transform? player1Transform;
+    public float speed = 0.0015f;
 
-    public float player2Pos = 0f;
+    public Transform? player1Transform;
     public Transform? player2Transform;
 
     public override void Update()
@@ -22,20 +21,20 @@ public class GameManager : Component
 
         if (Input.IsKeyDown(Keys.Left))
         {
-            if (player2Transform.Position.X > 0.35f) player2Transform.Position.X -= 0.01f;
+            if (player2Transform.Position.X > 0.35f) player2Transform.Position.X -= speed;
         }
         if (Input.IsKeyDown(Keys.Right))
         {
-            if (player2Transform.Position.X < 0.740f) player2Transform.Position.X += 0.01f;
+            if (player2Transform.Position.X < 0.740f) player2Transform.Position.X += speed;
         }
 
         if (Input.IsKeyDown(Keys.A))
         {
-            if (player1Transform.Position.X > -0.740f) player1Transform.Position.X -= 0.01f;
+            if (player1Transform.Position.X > -0.740f) player1Transform.Position.X -= speed;
         }
         if (Input.IsKeyDown(Keys.D))
         {
-            if (player1Transform.Position.X < -0.35f) player1Transform.Position.X += 0.01f;
+            if (player1Transform.Position.X < -0.35f) player1Transform.Position.X += speed;
         }
     }
 }

@@ -31,10 +31,10 @@ public class Scene
         0.5f,  0.5f,   1.0f, 1.0f // top right
     };
     uint[] quadIndices = { 0, 1, 2, 2, 3, 0 };
-
+    
     // Cirlce
     int segments = 32;
-    float radius = 0.25f;
+    float radius = 0.5f;
     List<float> cirVertices = new();
     List<uint> cirIndices = new();
     #endregion
@@ -55,10 +55,11 @@ public class Scene
         GameObject wall = DrawQuad("Wall", transform: new Transform(new Vector2(0, -0.75f), new Vector2(0.2f, 0.75f)), texture: texture);
         wall.AddComponent(new Collider());
 
-        float randXPos = (float)Random.Shared.NextDouble() * 1.85f - .85f;
-        Transform ballTransform = new Transform(new Vector2(randXPos, .5f), new Vector2(.5f, .5f));
+        Transform ballTransform = new Transform(new Vector2(-.5f, 0f), new Vector2(.1f,.1f));
         GameObject ball = DrawCircle("Ball", ballTransform, Color.Pink, texture1);
         ball.AddComponent(new Rigidbody());
+        Rigidbody rb = ball.GetComponent<Rigidbody>();
+        rb.sceneObjects = objects;
 
         GameObject player1 = DrawQuad("Player1", new Transform(new Vector2(-0.5f, -0.5f), new Vector2(0.5f, 0.1f), -.5f), color: Color.Blue);
         GameObject player2 = DrawQuad("Player2", new Transform(new Vector2(0.5f, -0.5f), new Vector2(0.5f, 0.1f), .5f), color: Color.Orange);
